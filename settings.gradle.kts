@@ -17,3 +17,5 @@ dependencyResolutionManagement {
         maven(url = "https://jitpack.io")
     }
 }
+
+include(":plugin")
