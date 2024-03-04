@@ -39,8 +39,8 @@ open class PublishArtifactsTask @Inject constructor(
     private fun loadConfig() {
         val pluginExtension = project.extensions.findByType<AndroidArtifactsPublishExtension>()
         if (pluginExtension != null) {
-            if (pluginExtension.outputDir.isPresent) {
-                outputDirectoryPath = pluginExtension.outputDir.get()
+            if (pluginExtension.outputDir != null) {
+                outputDirectoryPath = pluginExtension.outputDir!!
             }
             if (pluginExtension.hashAlgorithm.isPresent && pluginExtension.hashAlgorithm.get().isNotEmpty()) {
                 hashAlgorithm = pluginExtension.hashAlgorithm.get()
