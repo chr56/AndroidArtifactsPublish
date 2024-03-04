@@ -12,7 +12,6 @@ import com.android.build.api.variant.BuiltArtifactsLoader
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
-import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.findByType
 import tools.release.file.assureDir
@@ -38,7 +37,7 @@ open class PublishArtifactsTask @Inject constructor(
     private var hashAlgorithm: Set<String> = setOf("SHA-1", "SHA-256")
 
     private fun loadConfig() {
-        val pluginExtension: PluginExtension? = project.extensions.findByType<PluginExtension>()
+        val pluginExtension = project.extensions.findByType<AndroidArtifactsPublishExtension>()
         if (pluginExtension != null) {
             if (pluginExtension.outputDir.isPresent) {
                 outputDirectoryPath = pluginExtension.outputDir.get()

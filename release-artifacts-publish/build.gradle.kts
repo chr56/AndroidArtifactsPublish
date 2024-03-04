@@ -33,7 +33,7 @@ gradlePlugin {
     plugins {
         create("android-artifacts-publish") {
             id = "io.github.chr56.tools.release"
-            implementationClass = "tools.release.Plugin"
+            implementationClass = "tools.release.AndroidArtifactsPublishPlugin"
 
             displayName = "Android Artifacts Publish"
             description = "A tiny Gradle Plugin for publishing Android Artifacts!"

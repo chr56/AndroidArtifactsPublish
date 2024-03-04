@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.property
 import org.gradle.kotlin.dsl.setProperty
 
 
-open class PluginExtension(project: Project) {
+open class AndroidArtifactsPublishExtension(project: Project) {
 
     /**
      * target output directory path
