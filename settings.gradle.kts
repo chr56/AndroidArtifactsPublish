@@ -18,4 +18,4 @@ dependencyResolutionManagement {
     }
 }
 
-include(":plugin")
+include(":release-artifacts-publish")
