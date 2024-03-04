@@ -42,8 +42,8 @@ open class PublishArtifactsTask @Inject constructor(
             if (pluginExtension.outputDir != null) {
                 outputDirectoryPath = pluginExtension.outputDir!!
             }
-            if (pluginExtension.hashAlgorithm.isPresent && pluginExtension.hashAlgorithm.get().isNotEmpty()) {
-                hashAlgorithm = pluginExtension.hashAlgorithm.get()
+            if (!pluginExtension.hashAlgorithm.isNullOrEmpty()) {
+                hashAlgorithm = pluginExtension.hashAlgorithm!!
             }
         }
     }
