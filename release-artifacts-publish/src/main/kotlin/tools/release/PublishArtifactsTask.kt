@@ -12,8 +12,9 @@ import com.android.build.api.variant.BuiltArtifactsLoader
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
-import tools.release.Plugin.Companion.productDir
+import org.gradle.kotlin.dsl.findByType
 import tools.release.file.assureDir
 import tools.release.file.hashValidationFile
 import tools.release.git.getGitHash
@@ -32,8 +33,25 @@ open class PublishArtifactsTask @Inject constructor(
         description = "Publish Artifacts to target directory"
     }
 
+    private var outputDirectoryPath: String = Constants.DEFAULT_PRODUCTS_DIR
+
+    private var hashAlgorithm: Set<String> = setOf("SHA-1", "SHA-256")
+
+    private fun loadConfig() {
+        val pluginExtension: PluginExtension? = project.extensions.findByType<PluginExtension>()
+        if (pluginExtension != null) {
+            if (pluginExtension.outputDir.isPresent) {
+                outputDirectoryPath = pluginExtension.outputDir.get()
+            }
+            if (pluginExtension.hashAlgorithm.isPresent && pluginExtension.hashAlgorithm.get().isNotEmpty()) {
+                hashAlgorithm = pluginExtension.hashAlgorithm.get()
+            }
+        }
+    }
+
     @TaskAction
     fun publish() {
+        loadConfig()
         collect()
     }
 
@@ -55,7 +73,8 @@ open class PublishArtifactsTask @Inject constructor(
                 NameStyle.VersionGitHashTime(project.getGitHash(true))
             }
 
-        val destinationDir: File = File(project.productDir(), variant.canonicalName).assureDir()
+        val outputDir = File(project.rootDir, outputDirectoryPath).also { it.mkdirs() }
+        val destinationDir: File = File(outputDir, variant.canonicalName).assureDir()
 
         exportArtifact(
             variant,
@@ -64,6 +83,7 @@ open class PublishArtifactsTask @Inject constructor(
             name,
             nameStyle,
             destinationDir,
+            hashAlgorithm,
         )
     }
 
@@ -75,6 +95,7 @@ open class PublishArtifactsTask @Inject constructor(
             name: String,
             nameStyle: NameStyle,
             destinationDir: File,
+            enabledHashAlgorithm: Collection<String>,
             overwrite: Boolean = true,
         ) {
 
@@ -83,8 +104,9 @@ open class PublishArtifactsTask @Inject constructor(
                 val destination = File(destinationDir, "$apkName.apk")
                 val file = File(artifact.outputFile)
                 file.copyTo(destination, overwrite)
-                destination.hashValidationFile("SHA-1")
-                destination.hashValidationFile("SHA-256")
+                for (algorithm in enabledHashAlgorithm) {
+                    destination.hashValidationFile(algorithm)
+                }
                 notify(destination)
             }
 
