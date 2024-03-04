@@ -4,6 +4,8 @@ This is a tiny Gradle Plugin for publishing Android Artifacts.
 
 _**(🚧 This Plugin is in earlier Development 🚧)**_
 
+_This plugin once was as Composite Build in Phonograph Plus; now it is planing to be independent._
+
 # Features
 
 - Collect Android Artifacts (Apks, mapping) to one place
@@ -15,6 +17,10 @@ _**(🚧 This Plugin is in earlier Development 🚧)**_
 
 # Usage
 
+This plugin requires `Android Gradle Plugin` (7.0+).
+
+(though it currently is a compile-only dependency.)
+
 ```kotlin
     androidComponents { // require ApplicationBaseFlavor
         val name = "YOUR PRODUCTS NAME" // this name would be the prefix of collected files
@@ -25,3 +31,17 @@ _**(🚧 This Plugin is in earlier Development 🚧)**_
 ```
 
 Then the task `publish<VariantName>` (eg. `publishRelease`) would be registered.
+
+
+# TODO List
+
+## Output
+
+- [ ] Custom location for output
+- [ ] Custom format for renaming
+- [ ] Custom Hash Algorithm
+
+## Upload and Release
+
+- [ ] Upload outputs to GitHub Release
+- [ ] Generate GitHub Release Note
