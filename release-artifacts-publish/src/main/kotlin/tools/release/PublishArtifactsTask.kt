@@ -16,7 +16,6 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.findByType
 import tools.release.file.assureDir
 import tools.release.file.hashValidationFile
-import tools.release.git.getGitHash
 import tools.release.text.NameGenerator
 import tools.release.text.NameSegment
 import tools.release.text.canonicalName
@@ -33,9 +32,9 @@ open class PublishArtifactsTask @Inject constructor(
         description = "Publish Artifacts to target directory"
     }
 
-    private var outputDirectoryPath: String = Constants.DEFAULT_PRODUCTS_DIR
+    private var outputDirectoryPath: String = Default.outputDir
 
-    private var hashAlgorithm: Set<String> = setOf("SHA-1", "SHA-256")
+    private var hashAlgorithm: Set<String> = Default.hashAlgorithm
 
     private var nameStyle: List<NameSegment>? = null
 
@@ -52,11 +51,7 @@ open class PublishArtifactsTask @Inject constructor(
                 if (!pluginExtension.nameStyle.isNullOrEmpty()) {
                     pluginExtension.nameStyle!!
                 } else {
-                    if (variant.buildType != "debug") {
-                        listOf(NameSegment.VersionName)
-                    } else {
-                        listOf(NameSegment.VersionName, NameSegment.GitHash(project.getGitHash(true)), NameSegment.Time)
-                    }
+                    Default.nameStyle(project, variant.buildType == "debug")
                 }
         }
     }
