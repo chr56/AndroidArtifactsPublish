@@ -83,22 +83,3 @@ sealed interface NameStyle {
         }
     }
 }
-
-private fun Collection<String>.commonPrefix(): String? {
-    if (isEmpty()) return null
-    if (size == 1) return first()
-
-    var index = -1
-    while (true) {
-        index++
-        val chars = mapNotNull { it.getOrNull(index) }.takeIf { it.size == this.size }?.toSet()
-        if (chars != null && chars.size == this.size) {
-            continue
-        } else {
-            index--
-            break
-        }
-    }
-
-    return if (index >= 0) first().substring(index) else null
-}
