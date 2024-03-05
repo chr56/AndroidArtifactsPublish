@@ -37,9 +37,9 @@ Then the task `publish<VariantName>` (eg. `publishRelease`) would be registered.
 
 ## Output
 
-- [ ] Custom location for output
-- [ ] Custom format for renaming
-- [ ] Custom Hash Algorithm
+- [x] Custom location for output
+- [x] Custom format for renaming
+- [x] Custom Hash Algorithm
 
 ## Upload and Release
 
