@@ -6,6 +6,9 @@ _**(🚧 This Plugin is in earlier Development 🚧)**_
 
 _This plugin once was as Composite Build in Phonograph Plus; now it is planing to be independent._
 
+[<img src="https://img.shields.io/github/v/release/chr56/AndroidArtifactsPublish?label=Github%20Release" alt="Github%20Release">](https://github.com/chr56/AndroidArtifactsPublish/releases/latest)
+[<img src="https://img.shields.io/gradle-plugin-portal/v/io.github.chr56.tools.release?label=Gradle%20Plugin%20Portal" alt="Gradle%20Plugin%20Portal">](https://plugins.gradle.org/plugin/io.github.chr56.tools.release)
+
 # Features
 
 - Collect Android Artifacts (Apks, mapping) to one place
