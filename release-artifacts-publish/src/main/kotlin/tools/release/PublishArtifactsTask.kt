@@ -17,7 +17,8 @@ import org.gradle.kotlin.dsl.findByType
 import tools.release.file.assureDir
 import tools.release.file.hashValidationFile
 import tools.release.git.getGitHash
-import tools.release.text.NameStyle
+import tools.release.text.NameGenerator
+import tools.release.text.NameSegment
 import tools.release.text.canonicalName
 import tools.release.zip.gzip
 import java.io.File
@@ -65,11 +66,11 @@ open class PublishArtifactsTask @Inject constructor(
             return
         }
 
-        val nameStyle =
+        val nameStyle: List<NameSegment> =
             if (variant.buildType != "debug") {
-                NameStyle.Version
+                listOf(NameSegment.VersionName)
             } else {
-                NameStyle.VersionGitHashTime(project.getGitHash(true))
+                listOf(NameSegment.VersionName, NameSegment.GitHash(project.getGitHash(true)), NameSegment.Time)
             }
 
         val outputDir = File(project.rootDir, outputDirectoryPath).also { it.mkdirs() }
@@ -92,14 +93,14 @@ open class PublishArtifactsTask @Inject constructor(
             artifacts: Collection<BuiltArtifact>,
             mappingFile: RegularFile?,
             name: String,
-            nameStyle: NameStyle,
+            nameStyle: List<NameSegment>,
             destinationDir: File,
             enabledHashAlgorithm: Collection<String>,
             overwrite: Boolean = true,
         ) {
 
             for (artifact in artifacts) {
-                val apkName = nameStyle.generateApkName(name, variant, artifact)
+                val apkName = NameGenerator.generateApkName(name, variant, artifact, nameStyle)
                 val destination = File(destinationDir, "$apkName.apk")
                 val file = File(artifact.outputFile)
                 file.copyTo(destination, overwrite)
@@ -111,7 +112,7 @@ open class PublishArtifactsTask @Inject constructor(
 
             val mapping: File? = mappingFile?.asFile
             if (mapping != null && mapping.exists()) {
-                val mappingName = nameStyle.generateMappingName(name, variant)
+                val mappingName = NameGenerator.generateMappingName(name, variant, nameStyle)
                 val destination = File(destinationDir, "$mappingName.txt.gz")
                 val file = mapping.gzip()
                 file.copyTo(destination, overwrite)
