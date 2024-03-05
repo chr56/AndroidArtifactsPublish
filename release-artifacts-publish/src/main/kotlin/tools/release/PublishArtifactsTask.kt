@@ -37,6 +37,8 @@ open class PublishArtifactsTask @Inject constructor(
 
     private var hashAlgorithm: Set<String> = setOf("SHA-1", "SHA-256")
 
+    private var nameStyle: List<NameSegment>? = null
+
     private fun loadConfig() {
         val pluginExtension = project.extensions.findByType<AndroidArtifactsPublishExtension>()
         if (pluginExtension != null) {
@@ -46,6 +48,16 @@ open class PublishArtifactsTask @Inject constructor(
             if (!pluginExtension.hashAlgorithm.isNullOrEmpty()) {
                 hashAlgorithm = pluginExtension.hashAlgorithm!!
             }
+            nameStyle =
+                if (!pluginExtension.nameStyle.isNullOrEmpty()) {
+                    pluginExtension.nameStyle!!
+                } else {
+                    if (variant.buildType != "debug") {
+                        listOf(NameSegment.VersionName)
+                    } else {
+                        listOf(NameSegment.VersionName, NameSegment.GitHash(project.getGitHash(true)), NameSegment.Time)
+                    }
+                }
         }
     }
 
@@ -66,13 +78,6 @@ open class PublishArtifactsTask @Inject constructor(
             return
         }
 
-        val nameStyle: List<NameSegment> =
-            if (variant.buildType != "debug") {
-                listOf(NameSegment.VersionName)
-            } else {
-                listOf(NameSegment.VersionName, NameSegment.GitHash(project.getGitHash(true)), NameSegment.Time)
-            }
-
         val outputDir = File(project.rootDir, outputDirectoryPath).also { it.mkdirs() }
         val destinationDir: File = File(outputDir, variant.canonicalName).assureDir()
 
@@ -81,7 +86,7 @@ open class PublishArtifactsTask @Inject constructor(
             builtApkArtifacts.elements,
             mappingFile,
             name,
-            nameStyle,
+            nameStyle!!,
             destinationDir,
             hashAlgorithm,
         )
