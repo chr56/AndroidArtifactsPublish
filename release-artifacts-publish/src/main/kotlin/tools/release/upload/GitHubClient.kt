@@ -6,6 +6,7 @@ package tools.release.upload
 
 import org.gradle.internal.impldep.com.google.gson.Gson
 import org.gradle.internal.impldep.com.google.gson.GsonBuilder
+import org.gradle.internal.impldep.com.google.gson.JsonObject
 import org.gradle.internal.impldep.org.apache.http.HttpEntity
 import org.gradle.internal.impldep.org.apache.http.client.ClientProtocolException
 import org.gradle.internal.impldep.org.apache.http.client.methods.CloseableHttpResponse
@@ -14,6 +15,7 @@ import org.gradle.internal.impldep.org.apache.http.client.methods.HttpPost
 import org.gradle.internal.impldep.org.apache.http.client.methods.HttpUriRequest
 import org.gradle.internal.impldep.org.apache.http.entity.ContentType
 import org.gradle.internal.impldep.org.apache.http.entity.FileEntity
+import org.gradle.internal.impldep.org.apache.http.entity.StringEntity
 import org.gradle.internal.impldep.org.apache.http.impl.client.CloseableHttpClient
 import org.gradle.internal.impldep.org.apache.http.impl.client.HttpClientBuilder
 import org.gradle.internal.impldep.org.apache.http.message.BasicHeader
@@ -54,6 +56,57 @@ class GitHubClient(token: String) : Closeable {
             }
         }
 
+    }
+
+
+    @Throws(IOException::class, ClientProtocolException::class)
+    fun createRelease(
+        owner: String,
+        repo: String,
+        tag: String,
+        name: String,
+        prerelease: Boolean = true,
+        draft: Boolean = true,
+        body: String? = null,
+        latest: String? = "legacy",
+    ): ResponseResult<GitHubRelease> {
+
+        val request =
+            HttpPost("https://$BASE_URL/repos/$owner/$repo/releases").apply {
+
+
+                val jsonObject = JsonObject().apply {
+                    addProperty("tag_name", tag)
+                    addProperty("name", name)
+                    addProperty("prerelease", prerelease)
+                    addProperty("draft", draft)
+                    addProperty("make_latest", latest)
+                    if (body != null) {
+                        addProperty("body", body)
+                        addProperty("generate_release_notes", false)
+                    } else {
+                        addProperty("generate_release_notes", true)
+                    }
+                }
+                entity = StringEntity("$jsonObject", Charsets.UTF_8).apply {
+                    setContentType(ContentType.APPLICATION_JSON.toString())
+                }
+
+            }
+
+        val response: CloseableHttpResponse = execute(request) ?: return ResponseResult.Error()
+        val statusLine = response.statusLine
+        return when (statusLine.statusCode) {
+            201 -> {
+                parseResult(response.entity, statusLine.statusCode, GitHubRelease::class.java)
+            }
+
+            else -> {
+                println("Error: $statusLine")
+                println(response.entity.content.bufferedReader().use { it.readText() })
+                ResponseResult.Failed(statusLine.statusCode)
+            }
+        }
     }
 
     @Throws(IOException::class, ClientProtocolException::class)
