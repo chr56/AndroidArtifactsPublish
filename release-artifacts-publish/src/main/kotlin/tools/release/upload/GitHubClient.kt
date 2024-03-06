@@ -32,70 +32,69 @@ class GitHubClient(token: String) : Closeable {
     }
 
     @Throws(IOException::class, ClientProtocolException::class)
-    fun getRelease(owner: String, repo: String, tag: String): GitHubRelease? {
+    fun getRelease(owner: String, repo: String, tag: String): ResponseResult<GitHubRelease> {
 
         val response: CloseableHttpResponse =
-            execute(HttpGet("https://$BASE_URL/repos/$owner/$repo/releases/tags/$tag")) ?: return null
+            execute(HttpGet("https://$BASE_URL/repos/$owner/$repo/releases/tags/$tag")) ?: return ResponseResult.Error()
 
-        return when (response.statusLine.statusCode) {
+        val statusLine = response.statusLine
+        return when (statusLine.statusCode) {
             200 -> {
-                val entity: HttpEntity? = response.entity
-                if (entity != null) {
-                    entity.content.bufferedReader().use { reader ->
-                        val text = reader.readText()
-                        gson.fromJson(text, GitHubRelease::class.java)
-                    }
-                } else {
-                    println("No responding")
-                    null
-                }
+                parseResult(response.entity, statusLine.statusCode, GitHubRelease::class.java)
             }
 
             404 -> {
                 println("Release Not Found: $owner/$repo tag $tag")
-                null
+                ResponseResult.Failed(statusLine.statusCode)
             }
 
             else -> {
-                println("Error: ${response.statusLine}")
-                null
+                println("Error: $statusLine")
+                ResponseResult.Failed(statusLine.statusCode)
             }
         }
 
     }
 
     @Throws(IOException::class, ClientProtocolException::class)
-    fun uploadReleaseAsset(owner: String, repo: String, releaseId: String, file: File): GitHubAsset? {
+    fun uploadReleaseAsset(owner: String, repo: String, releaseId: String, file: File): ResponseResult<GitHubAsset> {
         require(file.exists() && file.isFile) { "${file.path} is not an existed file!" }
         val filename = file.name
         val request =
             HttpPost("https://$UPLOAD_URL/repos/$owner/$repo/releases/$releaseId/assets?name=$filename").apply {
                 entity = FileEntity(file, ContentType.APPLICATION_OCTET_STREAM)
             }
-        val response: CloseableHttpResponse = execute(request) ?: return null
-        return when (response.statusLine.statusCode) {
+
+        val response: CloseableHttpResponse = execute(request) ?: return ResponseResult.Error()
+
+        val statusLine = response.statusLine
+        return when (statusLine.statusCode) {
             201 -> {
-                val entity: HttpEntity? = response.entity
-                if (entity != null) {
-                    entity.content.bufferedReader().use { reader ->
-                        val text = reader.readText()
-                        gson.fromJson(text, GitHubAsset::class.java)
-                    }
-                } else {
-                    println("No responding")
-                    null
-                }
+                parseResult(response.entity, statusLine.statusCode, GitHubAsset::class.java)
             }
 
             422 -> {
                 println("Already Exist!")
-                null
+                ResponseResult.Failed(statusLine.statusCode)
             }
 
             else -> {
-                println("Error: ${response.statusLine}")
-                null
+                println("Error: $statusLine")
+                ResponseResult.Failed(statusLine.statusCode)
             }
+        }
+    }
+
+    private fun <T> parseResult(entity: HttpEntity?, statusCode: Int, type: Class<T>): ResponseResult<T> {
+        return if (entity != null) {
+            entity.content.bufferedReader().use { reader ->
+                val text = reader.readText()
+                val asset = gson.fromJson(text, type)
+                ResponseResult.OK(statusCode, asset)
+            }
+        } else {
+            println("No responding")
+            ResponseResult.Error()
         }
     }
 
