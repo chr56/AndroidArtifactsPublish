@@ -28,5 +28,5 @@ object NameGenerator {
         variant: ApplicationVariant,
         artifact: BuiltArtifact? = null,
         separator: CharSequence = "_",
-    ): String = style.map { it.produce(variant, artifact) }.joinToString(separator)
+    ): String = style.mapNotNull { it.produce(variant, artifact) }.joinToString(separator)
 }
