@@ -6,7 +6,7 @@ plugins {
     id("com.gradle.plugin-publish") version "1.2.1"
 }
 
-version = "0.1.0"
+version = "0.1.1"
 group = "io.github.chr56"
 
 
