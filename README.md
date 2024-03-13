@@ -17,12 +17,19 @@ _This plugin once was as Composite Build in Phonograph Plus; now it is planing t
 - Generate Apk Hashes
 
 
+# Setup & Usage
 
-# Usage
+## Setup Plugin
+
+```kotlin
+plugins {
+  id("io.github.chr56.tools.release") version "VERSION"
+}
+```
 
 This plugin requires `Android Gradle Plugin` (7.0+).
 
-(though it currently is a compile-only dependency.)
+## Register Task
 
 ```kotlin
     androidComponents { // require ApplicationBaseFlavor
@@ -35,6 +42,15 @@ This plugin requires `Android Gradle Plugin` (7.0+).
 
 Then the task `publish<VariantName>` (eg. `publishRelease`) would be registered.
 
+## Custom
+
+```kotlin
+    androidPublish {
+        outputDir = "<OUTPUT_DIRECTORY>" 
+        hashAlgorithm = setOf("MD5", "SHA-1")
+        nameStyle = listOf(NameSegment.VersionName, NameSegment.Abi, NameSegment.GitHash(getGitHash(shortHash = true)))
+    }
+```
 
 # TODO List
 
