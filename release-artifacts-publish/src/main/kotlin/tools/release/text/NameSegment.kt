@@ -30,6 +30,11 @@ sealed class NameSegment(val code: Char) {
         }
     }
 
+    data object Favor : NameSegment('F') {
+        override fun produce(variant: ApplicationVariant, artifact: BuiltArtifact?): CharSequence =
+            variant.canonicalName
+    }
+
     data object Time : NameSegment('T') {
         override fun produce(variant: ApplicationVariant, artifact: BuiltArtifact?): CharSequence = currentTimeString
     }
