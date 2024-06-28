@@ -23,9 +23,17 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
+tasks.named<Test>("test") {
+    useJUnitPlatform()
+}
+
 dependencies {
     compileOnly(gradleApi())
     compileOnly(libs.androidGradlePluginAPI)
+
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 @Suppress("UnstableApiUsage")
