@@ -35,9 +35,24 @@ class GitHubClient(token: String) : Closeable {
 
     @Throws(IOException::class, ClientProtocolException::class)
     fun getRelease(owner: String, repo: String, tag: String): ResponseResult<GitHubRelease> {
+        return getReleaseImpl(owner, repo, "tags/$tag")
+    }
+
+    @Throws(IOException::class, ClientProtocolException::class)
+    fun getRelease(owner: String, repo: String, id: Long): ResponseResult<GitHubRelease> {
+        return getReleaseImpl(owner, repo, "$id")
+    }
+
+    @Throws(IOException::class, ClientProtocolException::class)
+    fun getReleaseLatest(owner: String, repo: String): ResponseResult<GitHubRelease> {
+        return getReleaseImpl(owner, repo, "latest")
+    }
+
+    @Throws(IOException::class, ClientProtocolException::class)
+    private fun getReleaseImpl(owner: String, repo: String, location: String): ResponseResult<GitHubRelease> {
 
         val response: CloseableHttpResponse =
-            execute(HttpGet("https://$BASE_URL/repos/$owner/$repo/releases/tags/$tag")) ?: return ResponseResult.Error()
+            execute(HttpGet("https://$BASE_URL/repos/$owner/$repo/releases/$location")) ?: return ResponseResult.Error()
 
         val statusLine = response.statusLine
         return when (statusLine.statusCode) {
@@ -46,7 +61,32 @@ class GitHubClient(token: String) : Closeable {
             }
 
             404 -> {
-                println("Release Not Found: $owner/$repo tag $tag")
+                println("Release Not Found: $owner/$repo $location")
+                ResponseResult.Failed(statusLine.statusCode)
+            }
+
+            else -> {
+                println("Error: $statusLine")
+                ResponseResult.Failed(statusLine.statusCode)
+            }
+        }
+
+    }
+
+    @Throws(IOException::class, ClientProtocolException::class)
+    fun getReleases(owner: String, repo: String): ResponseResult<GitHubReleasesList> {
+
+        val response: CloseableHttpResponse =
+            execute(HttpGet("https://$BASE_URL/repos/$owner/$repo/releases")) ?: return ResponseResult.Error()
+
+        val statusLine = response.statusLine
+        return when (statusLine.statusCode) {
+            200 -> {
+                parseResult(response.entity, statusLine.statusCode, GitHubReleasesList::class.java)
+            }
+
+            404 -> {
+                println("Not Found: $owner/$repo")
                 ResponseResult.Failed(statusLine.statusCode)
             }
 

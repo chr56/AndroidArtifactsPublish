@@ -56,3 +56,5 @@ data class User(
     @SerializedName("gravatar_id") val gravatarId: String,
     @SerializedName("organizationsUrl") val organizationsUrl: String?,
 )
+
+class GitHubReleasesList : ArrayList<GitHubRelease>()
