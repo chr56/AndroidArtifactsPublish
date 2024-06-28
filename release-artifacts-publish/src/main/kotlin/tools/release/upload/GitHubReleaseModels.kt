@@ -10,7 +10,7 @@ import org.gradle.internal.impldep.com.google.gson.annotations.SerializedName
 
 
 data class GitHubRelease(
-    @SerializedName("id") val id: Int,
+    @SerializedName("id") val id: Long,
     @SerializedName("node_id") val nodeId: String,
     @SerializedName("name") val name: String?,
     @SerializedName("url") val url: String,
@@ -31,7 +31,7 @@ data class GitHubRelease(
 )
 
 data class GitHubAsset(
-    @SerializedName("id") val id: Int,
+    @SerializedName("id") val id: Long,
     @SerializedName("node_id") val nodeId: String,
     @SerializedName("name") val name: String?,
     @SerializedName("url") val url: String,
@@ -39,14 +39,14 @@ data class GitHubAsset(
     @SerializedName("uploader") val uploader: User,
     @SerializedName("content_type") val contentType: String?,
     @SerializedName("state") val state: String,
-    @SerializedName("size") val size: Int,
+    @SerializedName("size") val size: Long,
     @SerializedName("created_at") val createdAt: String,
     @SerializedName("updated_at") val updatedAt: String,
     @SerializedName("download_count") val downloadCount: Int,
 )
 
 data class User(
-    @SerializedName("id") val id: Int,
+    @SerializedName("id") val id: Long,
     @SerializedName("node_id") val nodeId: String,
     @SerializedName("url") val url: String,
     @SerializedName("html_url") val htmlUrl: String,
