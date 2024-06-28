@@ -11,6 +11,7 @@ import org.gradle.internal.impldep.org.apache.http.HttpEntity
 import org.gradle.internal.impldep.org.apache.http.client.ClientProtocolException
 import org.gradle.internal.impldep.org.apache.http.client.methods.CloseableHttpResponse
 import org.gradle.internal.impldep.org.apache.http.client.methods.HttpGet
+import org.gradle.internal.impldep.org.apache.http.client.methods.HttpPatch
 import org.gradle.internal.impldep.org.apache.http.client.methods.HttpPost
 import org.gradle.internal.impldep.org.apache.http.client.methods.HttpUriRequest
 import org.gradle.internal.impldep.org.apache.http.entity.ContentType
@@ -113,25 +114,7 @@ class GitHubClient(token: String) : Closeable {
 
         val request =
             HttpPost("https://$BASE_URL/repos/$owner/$repo/releases").apply {
-
-
-                val jsonObject = JsonObject().apply {
-                    addProperty("tag_name", tag)
-                    addProperty("name", name)
-                    addProperty("prerelease", prerelease)
-                    addProperty("draft", draft)
-                    addProperty("make_latest", latest)
-                    if (body != null) {
-                        addProperty("body", body)
-                        addProperty("generate_release_notes", false)
-                    } else {
-                        addProperty("generate_release_notes", true)
-                    }
-                }
-                entity = StringEntity("$jsonObject", Charsets.UTF_8).apply {
-                    setContentType(ContentType.APPLICATION_JSON.toString())
-                }
-
+                entity = generateReleaseJsonString(tag, name, prerelease, draft, body, latest)
             }
 
         val response: CloseableHttpResponse = execute(request) ?: return ResponseResult.Error()
@@ -146,6 +129,70 @@ class GitHubClient(token: String) : Closeable {
                 println(response.entity.content.bufferedReader().use { it.readText() })
                 ResponseResult.Failed(statusLine.statusCode)
             }
+        }
+    }
+
+    @Throws(IOException::class, ClientProtocolException::class)
+    fun updateRelease(
+        owner: String,
+        repo: String,
+        id: Long,
+        tag: String? = null,
+        name: String? = null,
+        prerelease: Boolean? = null,
+        draft: Boolean? = null,
+        body: String? = null,
+        latest: String? = null,
+    ): ResponseResult<GitHubRelease> {
+
+        val request =
+            HttpPatch("https://$BASE_URL/repos/$owner/$repo/releases/$id").apply {
+                entity = generateReleaseJsonString(tag, name, prerelease, draft, body, latest)
+            }
+
+        val response: CloseableHttpResponse = execute(request) ?: return ResponseResult.Error()
+        val statusLine = response.statusLine
+        return when (statusLine.statusCode) {
+            200 -> {
+                parseResult(response.entity, statusLine.statusCode, GitHubRelease::class.java)
+            }
+
+            else -> {
+                println("Error: $statusLine")
+                println(response.entity.content.bufferedReader().use { it.readText() })
+                ResponseResult.Failed(statusLine.statusCode)
+            }
+        }
+    }
+
+    private fun generateReleaseJsonString(
+        tag: String?,
+        name: String?,
+        prerelease: Boolean?,
+        draft: Boolean?,
+        body: String?,
+        latest: String?,
+    ): StringEntity {
+        val jsonObject = JsonObject().apply {
+            if (tag != null)
+                addProperty("tag_name", tag)
+            if (name != null)
+                addProperty("name", name)
+            if (prerelease != null)
+                addProperty("prerelease", prerelease)
+            if (draft != null)
+                addProperty("draft", draft)
+            if (latest != null)
+                addProperty("make_latest", latest)
+            if (body != null) {
+                addProperty("body", body)
+                addProperty("generate_release_notes", false)
+            } else {
+                addProperty("generate_release_notes", true)
+            }
+        }
+        return StringEntity("$jsonObject", Charsets.UTF_8).apply {
+            setContentType(ContentType.APPLICATION_JSON.toString())
         }
     }
 
