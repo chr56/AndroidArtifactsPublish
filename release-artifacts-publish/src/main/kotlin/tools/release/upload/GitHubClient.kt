@@ -34,6 +34,8 @@ class GitHubClient(token: String) : Closeable {
             .create()
     }
 
+    //region Release
+
     @Throws(IOException::class, ClientProtocolException::class)
     fun getRelease(owner: String, repo: String, tag: String): ResponseResult<GitHubRelease> {
         return getReleaseImpl(owner, repo, "tags/$tag")
@@ -196,6 +198,10 @@ class GitHubClient(token: String) : Closeable {
         }
     }
 
+    //endregion
+
+    //region Release Asset
+
     @Throws(IOException::class, ClientProtocolException::class)
     fun uploadReleaseAsset(owner: String, repo: String, releaseId: String, file: File): ResponseResult<GitHubAsset> {
         require(file.exists() && file.isFile) { "${file.path} is not an existed file!" }
@@ -224,6 +230,8 @@ class GitHubClient(token: String) : Closeable {
             }
         }
     }
+
+    //endregion
 
     private fun <T> parseResult(entity: HttpEntity?, statusCode: Int, type: Class<T>): ResponseResult<T> {
         return if (entity != null) {
