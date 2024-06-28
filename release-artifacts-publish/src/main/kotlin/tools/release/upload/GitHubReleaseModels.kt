@@ -58,3 +58,5 @@ data class User(
 )
 
 class GitHubReleasesList : ArrayList<GitHubRelease>()
+class GitHubAssetsList : ArrayList<GitHubAsset>()
+

@@ -202,6 +202,47 @@ class GitHubClient(token: String) : Closeable {
 
     //region Release Asset
 
+    @Throws(IOException::class)
+    fun getReleaseAsset(owner: String, repo: String, assetId: String): ResponseResult<GitHubAsset> {
+        val request = HttpGet("https://$UPLOAD_URL/repos/$owner/$repo/releases/assets/$assetId")
+
+        val response: CloseableHttpResponse = execute(request) ?: return ResponseResult.Error()
+
+        val statusLine = response.statusLine
+        return when (statusLine.statusCode) {
+            200, 302 -> {
+                parseResult(response.entity, statusLine.statusCode, GitHubAsset::class.java)
+            }
+
+            else -> {
+                println("Error: $statusLine")
+                ResponseResult.Failed(statusLine.statusCode)
+            }
+        }
+    }
+
+
+
+    @Throws(IOException::class)
+    fun getReleaseAssets(owner: String, repo: String,  releaseId: String): ResponseResult<GitHubAssetsList> {
+        val request = HttpGet("https://$UPLOAD_URL/repos/$owner/$repo/releases/$releaseId/assets")
+
+        val response: CloseableHttpResponse = execute(request) ?: return ResponseResult.Error()
+
+        val statusLine = response.statusLine
+        return when (statusLine.statusCode) {
+            200 -> {
+                parseResult(response.entity, statusLine.statusCode, GitHubAssetsList::class.java)
+            }
+
+            else -> {
+                println("Error: $statusLine")
+                ResponseResult.Failed(statusLine.statusCode)
+            }
+        }
+    }
+
+
     @Throws(IOException::class, ClientProtocolException::class)
     fun uploadReleaseAsset(owner: String, repo: String, releaseId: String, file: File): ResponseResult<GitHubAsset> {
         require(file.exists() && file.isFile) { "${file.path} is not an existed file!" }
