@@ -2,9 +2,11 @@
 
 ## Plugins
 
-kotlin = "1.9.22"
+kotlin = "2.1.10"
+ksp = "2.1.10-1.0.29"
+
 agp = "8.7.2"
-ksp = "1.9.22-1.0.17"
+
 versionChecker = "0.51.0"
 
 ## Libraries
