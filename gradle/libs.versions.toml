@@ -11,45 +11,42 @@ versionChecker = "0.51.0"
 
 ## Libraries
 #### Jetpack Start
-core-ktx = "1.13.1"
+core-ktx = "1.15.0"
 appcompat = "1.7.0"
-activity = "1.9.1"
-fragment = "1.8.2"
-lifecycle = "2.7.0"
-annotation = "1.8.0"
+activity = "1.9.3"
+fragment = "1.8.5"
+lifecycle = "2.8.7"
+annotation = "1.9.0"
 preference = "1.2.1"
 recyclerview = "1.3.2"
-constraintlayout = "2.1.4"
+viewpager2 = "1.1.0"
+constraintlayout = "2.2.0"
 percentlayout = "1.0.0"
 swiperefreshlayout = "1.1.0"
 media = "1.7.0"
-browser = "1.7.0"
+browser = "1.8.0"
 cardview = "1.0.0"
 palette = "1.0.0"
 room = "2.6.1"
-datastore = { strictly = "1.0.0" }
-material = "1.9.0"
-compose = "1.6.8"
-composeCompiler = "1.5.10"
+datastore = "1.1.1"
+material = "1.12.0"
+compose = "1.7.5"
 #### Jetpack End
 
 
 #### Popular Start
-ktxc = "1.8.1"
-ktxs-json = "1.6.3"
+ktxc = "1.9.0"
+ktxs-json = "1.7.3"
 ktxs-ktoml = "0.5.0"
-ktxs-kaml = "0.57.0"
+ktxs-kaml = "0.62.2"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
-coil = "2.6.0"
-koin = "3.5.6"
+coil = "2.7.0"
+koin = "4.0.0"
 #### Popular End
 
 #### Others Start
-materialDialogs = "3.3.0"
-composeMaterialDialogs = "0.9.0"
-composeSetting = "1.0.3"
-themeUtil = "0.2.0"
+
 #### Others End
 
 ## Test
@@ -71,6 +68,7 @@ androidx-annotation = { module = "androidx.annotation:annotation", version.ref =
 androidx-preference = { module = "androidx.preference:preference-ktx", version.ref = "preference" }
 
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx-percentlayout = { module = "androidx.percentlayout:percentlayout", version.ref = "percentlayout" }
@@ -80,6 +78,7 @@ androidx-media = { module = "androidx.media:media", version.ref = "media" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 androidx-palette = { module = "androidx.palette:palette-ktx", version.ref = "palette" }
+androidx-documentfile = { module = "androidx.documentfile:documentfile", version = "1.0.1" }
 
 #
 # Room
@@ -109,6 +108,7 @@ compose-foundation = { group = "androidx.compose.foundation", name = "foundation
 compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-material = { group = "androidx.compose.material", name = "material", version.ref = "compose" }
+compose-material-icons = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose" }
 
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 
@@ -145,32 +145,8 @@ androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core",
 
 androidGradlePluginAPI = { module = "com.android.tools.build:gradle-api", version.ref = "agp" } # for Plugin development
 
-materialDialogs-core = { group = "com.afollestad.material-dialogs", name = "core", version.ref = "materialDialogs" }
-materialDialogs-input = { group = "com.afollestad.material-dialogs", name = "input", version.ref = "materialDialogs" }
-materialDialogs-color = { group = "com.afollestad.material-dialogs", name = "color", version.ref = "materialDialogs" }
-
-composeMaterialDialogs = { module = "io.github.vanpra.compose-material-dialogs:core", version.ref = "composeMaterialDialogs" }
-composeSettingsUi = { group = "com.github.alorma", name = "compose-settings-ui", version.ref = "composeSetting" }
-
-themeUtils-materials = { group = "com.github.chr56.ThemeUtils", name = "materials-util", version.ref = "themeUtil" }
-themeUtils-color = { group = "com.github.chr56.ThemeUtils", name = "color-util", version.ref = "themeUtil" }
-themeUtils-tint = { group = "com.github.chr56.ThemeUtils", name = "tint-util", version.ref = "themeUtil" }
-
 storageUtilities = { module = "io.github.chr56:android-storage-utilities", version = "0.3.1" }
-musicMetadataSource = { module = "io.github.phonographplus:music-metadata-source", version = "0.1.1" }
 menuDsl = { module = "io.github.chr56:android-menu-dsl", version = "0.1.3" }
-seekArc = { module = "com.github.chr56:SeekArc", version = "1.0" }
-slidingUpPanel = { module = "com.github.kabouzeid:AndroidSlidingUpPanel", version = "6" }
-recyclerviewFastscroll = { module = "com.simplecityapps:recyclerview-fastscroll", version = "2.0.1" }
-licensesdialog = { module = "de.psdev.licensesdialog:licensesdialog", version = "2.2.0" }
-jaudiotagger = { module = "com.github.chr56:jaudiotagger", version = "0.0.3" }
-observablescrollview = { module = "com.github.chr56:Android-ObservableScrollView-Retro", version = "0.0.1" }
-appIntro = { module = "com.github.AppIntro:AppIntro", version = "6.3.1" }
-advrecyclerview = { module = "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview", version = "1.0.0" }
-composeReorderable = { module = "org.burnoutcrew.composereorderable:reorderable", version = "0.9.6" }
-composeAnnotatedText = { module = "io.github.aghajari:AnnotatedText", version = "1.0.3" }
-statusBarLyricsApi = { module = "com.github.577fkj:StatusBarApiExample", version = "2.0" }
-lyricsGetterAPi = { module = "com.github.xiaowine:Lyric-Getter-Api", version = "6.0.0" }
 
 [bundles]
 
@@ -179,6 +155,7 @@ compose = [
     "compose-foundation",
     "compose-ui",
     "compose-material",
+    "compose-material-icons",
     "compose-activity",
 ]
 
@@ -193,23 +170,6 @@ androidx-room = [
     "androidx-room-runtime",
     "androidx-room-ktx",
 ]
-
-composeSettings = [
-    "composeSettingsUi",
-    #    "composeSettingsDatastore",
-]
-
-materialDialogs = [
-    "materialDialogs-core",
-    "materialDialogs-color",
-]
-
-themeUtil = [
-    "themeUtils-materials",
-    "themeUtils-color",
-    "themeUtils-tint",
-]
-
 
 # Test
 
@@ -229,12 +189,13 @@ test-androidx-suite = [
 [plugins]
 
 androidGradlePlugin = { id = "com.android.application", version.ref = "agp" }
-#androidGradlePluginLibrary = { id = "com.android.library", version.ref = "agp" }
+androidGradlePluginLibrary = { id = "com.android.library", version.ref = "agp" }
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
