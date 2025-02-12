@@ -18,6 +18,6 @@ object Default {
         if (!debugRelease) {
             listOf(NameSegment.VersionName)
         } else {
-            listOf(NameSegment.VersionName, NameSegment.GitHash(project.getGitHash(true)), NameSegment.Time)
+            listOf(NameSegment.VersionName, NameSegment.GitHash(project.getGitHash(true) ?: "na"), NameSegment.Time)
         }
 }

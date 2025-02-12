@@ -7,15 +7,11 @@ package tools.release.git
 import org.gradle.api.Project
 import java.io.ByteArrayOutputStream
 
-fun Project.getGitHash(shortHash: Boolean): String =
-    ByteArrayOutputStream().use { stdout ->
-        exec {
-            if (shortHash) {
-                commandLine("git", "rev-parse", "--short", "HEAD")
-            } else {
-                commandLine("git", "rev-parse", "HEAD")
-            }
-            standardOutput = stdout
+fun Project.getGitHash(shortHash: Boolean): String? =
+    providers.exec {
+        if (shortHash) {
+            commandLine("git", "rev-parse", "--short", "HEAD")
+        } else {
+            commandLine("git", "rev-parse", "HEAD")
         }
-        stdout
-    }.toString().trim()
+    }.standardOutput.asText?.get()
