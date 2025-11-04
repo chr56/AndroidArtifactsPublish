@@ -2,6 +2,8 @@
 
 ## Plugins
 
+gpp = "1.3.1"
+
 kotlin = "2.2.20"
 ksp = "2.2.20-2.0.4"
 
@@ -201,4 +203,4 @@ kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 versionChecker = { id = "com.github.ben-manes.versions", version.ref = "versionChecker" }
 
-artifactsRelease = { id = "io.github.chr56.tools.release", version = "0.1.2" }
+gradlePluginPublish = { id = "com.gradle.plugin-publish", version.ref = "gpp" }
