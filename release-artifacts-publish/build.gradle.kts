@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.gradlePluginPublish)
 }
 
-version = "0.1.3"
+version = "0.1.4"
 group = "io.github.chr56"
 
 
