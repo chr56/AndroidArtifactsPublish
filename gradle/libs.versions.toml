@@ -15,36 +15,36 @@ versionChecker = "0.51.0"
 #### Jetpack Start
 core-ktx = "1.17.0"
 appcompat = "1.7.1"
-activity = "1.10.1"
+activity = "1.12.4"
 fragment = "1.8.9"
-lifecycle = "2.9.4"
+lifecycle = "2.10.0"
 annotation = "1.9.1"
 preference = "1.2.1"
 recyclerview = "1.4.0"
 viewpager2 = "1.1.0"
 constraintlayout = "2.2.1"
 percentlayout = "1.0.0"
-swiperefreshlayout = "1.1.0"
+swiperefreshlayout = "1.2.0"
 media = "1.7.1"
-browser = "1.8.0"
+browser = "1.9.0"
 cardview = "1.0.0"
 palette = "1.0.0"
-room = "2.8.1"
+room = "2.8.4"
 datastore = "1.1.7"
 material = "1.12.0"
-compose = "1.9.3"
+compose = "1.9.5"
 #### Jetpack End
 
 
 #### Popular Start
 ktxc = "1.10.2"
-ktxs-json = "1.9.0"
+ktxs-json = "1.10.0"
 ktxs-ktoml = "0.7.0"
 ktxs-kaml = "0.90.0"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
 coil = "2.7.0"
-koin = "4.1.0"
+koin = "4.1.1"
 #### Popular End
 
 #### Others Start
@@ -53,10 +53,10 @@ koin = "4.1.0"
 
 ## Test
 junit = "4.13.2"
-mockito = "5.6.0"
-testCore = "1.6.1"
-testExtJunit = "1.2.1"
-testEspresso = "3.6.1"
+mockito = "5.17.0"
+testCore = "1.7.0"
+testExtJunit = "1.3.0"
+testEspresso = "3.7.0"
 
 [libraries]
 
